@@ -5,7 +5,18 @@ import form.input.Text;
 import php.Lib;
 
 /**
- * ...
+ * TODO:
+	 * Group field
+	 * File input
+	 * Rules:
+		 * mail
+		 * greater than (eq), lower than (eq), equals
+		 * matches
+		 * notempty
+		 * date
+		 * custom
+	 * Textareas
+	 * Select
  * @author Masadow
  */
 
