@@ -19,6 +19,7 @@ class Input implements Display
 		name = "";
 		value = "";
 		attr = { };
+		attr.label = { };
 	}
 	
 	public function html() : String {
@@ -30,6 +31,9 @@ class Input implements Display
 					attr.id = name;
 				labelCode += " for='" + attr.id + "'";
 			}
+			if (attr.label) {
+				labelCode += Utils.generateAttributes(attr.label);
+			}
 			code = labelCode + ">" + label + "</label>" + code;
 		}
 		attr.value = value;
@@ -39,7 +43,7 @@ class Input implements Display
 	}
 	
 	public function print() : Void {
-		Sys.print(html());		
+		Sys.print(html());
 	}
 	
 }

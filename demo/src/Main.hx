@@ -1,6 +1,7 @@
 package ;
 
 import form.Form;
+import form.Group;
 import form.input.Text;
 import php.Lib;
 
@@ -28,32 +29,39 @@ class Main
 		var form : Form = new Form();
 		
 		//Test custom class
-		Sys.print("<style>.red{color: red;}#blue{color: blue;}</style>");
+		Sys.print("<style>.red{color: red;}#blue{color: blue;}.green{color: green;}</style>");
 		
 		//This boolean will align labels and inputs
-		form.aligned = true;
-		form.alignedWidth = 250; //150 px default
+		form.content.setAlign(true, 250); //Second parameter corresponds to offset in pixel
 //		form.action = "myaction"; // By default, it is the same as the current URL
 		form.method = POST; //GET by default
 		
 		//Add some inputs to the form
-		var textinput : Text = form.addTextInput("Enter a sentence beginning with 'Hello'", "hello", "Hello");
+		var textinput : Text = form.content.addTextInput("Enter a sentence beginning with 'Hello'", "hello", "Hello");
 		textinput.attr.clazz = "red"; //Note "clazz" instead of "class".
 
 		textinput = new Text();
+		textinput.attr.label.clazz = "green";
 		textinput.label = "Do not leave it blank";
 		textinput.name = "noblank";
-		form.addInput(textinput).attr.id = "blue";
+		form.content.addInput(textinput).attr.id = "blue";
 		
-		form.addRadioInput("A", "radio[]", "A");
-		form.addRadioInput("B", "radio[]", "B");
-		form.addRadioInput("C (FALSE)", "radio[]", "C").attr.checked = true;
-		form.addRadioInput("D", "radio[]", "D");
+		var radioGroup = new Group();
+		radioGroup.isInline = true;
+		radioGroup.addRadioInput("A", "radio[]", "A");
+		radioGroup.addRadioInput("B", "radio[]", "B");
+		radioGroup.addRadioInput("C (FALSE)", "radio[]", "C").attr.checked = true;
+		radioGroup.addRadioInput("D", "radio[]", "D");
+		form.content.addGroup(radioGroup);
 
-		form.addCheckboxInput("Dog", "cb[]", "dog");
-		form.addCheckboxInput("Cat", "cb[]", "cat").attr.checked = true;
-		form.addCheckboxInput("Kitchen", "cb[]", "kitchen").attr.checked = true;
-		form.addCheckboxInput("Bird", "cb[]", "bird");
+		var cbGroup = new Group();
+		cbGroup.tag = "fieldset";
+		cbGroup.legend = "This is a legend";
+		cbGroup.addCheckboxInput("Dog", "cb[]", "dog");
+		cbGroup.addCheckboxInput("Cat", "cb[]", "cat").attr.checked = true;
+		cbGroup.addCheckboxInput("Kitchen", "cb[]", "kitchen").attr.checked = true;
+		cbGroup.addCheckboxInput("Bird", "cb[]", "bird");
+		form.content.addGroup(cbGroup);
 
 		form.submitValue = "GO GO GO !";
 		
