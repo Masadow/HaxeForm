@@ -4,6 +4,7 @@ import form.input.Input;
 import form.input.Radio;
 import form.input.Text;
 import haxe.web.Request;
+import php.Web;
 
 enum Method {
 	GET;
@@ -64,5 +65,29 @@ class Form implements Display
 	
 	public function print() : Void {
 		Sys.print(html());
+	}
+	
+	/*
+	 * TODO:
+		 * Code display:
+			* Add \n to html methods and a pre tag to have a better formatting
+		 * Fields rules
+		 * Form post/get data (Neko compatibility needed)
+		 * Execution times:
+			 * Rendering
+			 * Validating
+	 */
+	public function debug() : Void {
+		Sys.print("<fieldset><legend>Form " + (attr.id ? "#" + attr.id : "") + " debug display</legend>");
+		Sys.print("<fieldset><legend>Form rendering source code</legend><code>"+ StringTools.htmlEscape(html()) +"</code></fieldset>");
+		Sys.print("<fieldset><legend>Fields rules</legend></fieldset>");
+		#if php
+		Sys.print("<fieldset><legend>" + Std.string(method) + " data</legend>" + (method == GET ? Debug.formGetData() : Debug.formPostData()) +"</fieldset>");
+		#else
+		Sys.print("<fieldset><legend>" + Std.string(method) + " data</legend>Not compatible with your compilation target</fieldset>");
+		#end
+		Sys.print("<fieldset><legend>Files</legend>" + (upload ? "" : "Not a form upload") + "</fieldset>");
+		Sys.print("<fieldset><legend>Execution times</legend></fieldset>");
+		Sys.print("</fieldset>");
 	}
 }

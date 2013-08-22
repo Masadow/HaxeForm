@@ -67,6 +67,9 @@ class Main
 		
 		//Print the form. You can print each input yourself by calling Input.print() method
 		form.print();
+		
+		//Debug purpose
+		form.debug();
 	}
 
 }
