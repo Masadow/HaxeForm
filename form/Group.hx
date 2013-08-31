@@ -12,7 +12,7 @@ import form.input.Checkbox;
 class Group implements Display
 {
 
-	private var inputs : List<Display>;
+	public var inputs(default, null) : List<Display>;
 	public var aligned : Bool;
 	public var alignedWidth : Int; //Pixel
 	public var attr : Dynamic;

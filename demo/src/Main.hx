@@ -3,6 +3,7 @@ package ;
 import form.Form;
 import form.Group;
 import form.input.Text;
+import form.validation.rule.Min;
 import php.Lib;
 
 /**
@@ -20,14 +21,13 @@ import php.Lib;
 	 * Select
  * @author Masadow
  */
-
 class Main 
 {
 
 	static function main() 
 	{
 		var form : Form = new Form();
-		
+
 		//Test custom class
 		Sys.print("<style>.red{color: red;}#blue{color: blue;}.green{color: green;}</style>");
 		
@@ -39,11 +39,13 @@ class Main
 		//Add some inputs to the form
 		var textinput : Text = form.content.addTextInput("Enter a sentence beginning with 'Hello'", "hello", "Hello");
 		textinput.attr.clazz = "red"; //Note "clazz" instead of "class".
+		textinput.rules.push(new CustomRule());
 
 		textinput = new Text();
 		textinput.attr.label.clazz = "green";
 		textinput.label = "Do not leave it blank";
 		textinput.name = "noblank";
+		textinput.rules.push(new Min(1));
 		form.content.addInput(textinput).attr.id = "blue";
 		
 		var radioGroup = new Group();
@@ -64,7 +66,15 @@ class Main
 		form.content.addGroup(cbGroup);
 
 		form.submitValue = "GO GO GO !";
+
+		if (form.valid()) {
+			
+		}
 		
+		//Repopulate all fields after the form was submited
+		//Don't do anything the first time
+		form.repopulate();
+
 		//Print the form. You can print each input yourself by calling Input.print() method
 		form.print();
 		

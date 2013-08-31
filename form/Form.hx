@@ -4,7 +4,10 @@ import form.input.Input;
 import form.input.Radio;
 import form.input.Text;
 import haxe.web.Request;
+import php.Lib;
+import php.Sys;
 import php.Web;
+import haxe.ds.StringMap;
 
 enum Method {
 	GET;
@@ -17,6 +20,7 @@ enum Method {
  */
 class Form implements Display
 {
+	private var params : StringMap<String>;
 	
 	public var content(default, null) : Group;
 	public var upload : Bool;
@@ -33,11 +37,58 @@ class Form implements Display
 		method = GET;
 		attr = { };
 		submitValue = null;
+		params = Web.getParams();
 	}
 	
 	public function addInput(input : Input) : Input {
 		content.addInput(input);
 		return input;
+	}
+	
+	private function populateGroup(group : Group) {
+		for (input in group.inputs) {
+			if (Std.is(input, Group)) {
+				populateGroup(cast input);
+			}
+			else {
+				var i : Input = cast input; 
+				if (params.exists(i.name)) {
+					i.value = params.get(i.name);
+				}
+				else if (StringTools.endsWith(i.name, "[]") && params.exists(i.name.substr(0, i.name.length - 2))) {
+					//trace(params.get(i.name.substr(0, i.name.length - 2)));
+					//var arr : Array<String> = cast params.get(i.name.substr(0, i.name.length - 2));
+
+					//TMP BEGIN
+					//Wait for Haxe 3.1
+					if (Reflect.hasField(i.attr, "checked") && Web.getParamValues(i.name.substr(0, i.name.length - 2)).length > 0) {
+						var attr : Dynamic = { };
+						for (field in Reflect.fields(i.attr)) {
+							trace(field);
+							if (field != "checked")
+								Reflect.setField(attr, field, Reflect.field(i.attr, field));
+						}
+						i.attr = attr;
+					}
+					var checked : Bool = Reflect.hasField(i.attr, "checked");
+					//TMP END
+
+					for (value in Web.getParamValues(i.name.substr(0, i.name.length - 2))) {
+						if (i.value == value) {
+							i.attr.checked = true;
+							break ;
+						}
+						//Fixed in Haxe 3.1
+						//if (Reflect.hasField(i.attr, "checked"))
+							//Reflect.deleteField(i.attr, "checked");
+					}
+				}
+			}
+		}
+	}
+	
+	public function repopulate() {
+		populateGroup(content);
 	}
 
 	public function html() : String {
@@ -67,6 +118,11 @@ class Form implements Display
 		Sys.print(html());
 	}
 	
+	public function valid() : Bool
+	{
+		return true;
+	}
+
 	/*
 	 * TODO:
 		 * Code display:

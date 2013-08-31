@@ -1,6 +1,7 @@
 package form.input;
 import form.Display;
 import form.Utils;
+import form.validation.Rule;
 
 /**
  * ...
@@ -12,6 +13,7 @@ class Input implements Display
 	public var name : String;
 	public var value : String;
 	public var attr : Dynamic;
+	public var rules : Array<Rule>;
 
 	public function new() 
 	{
@@ -20,6 +22,7 @@ class Input implements Display
 		value = "";
 		attr = { };
 		attr.label = { };
+		rules = new Array<Rule>();
 	}
 	
 	public function html() : String {
