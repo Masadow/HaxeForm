@@ -8,9 +8,13 @@ import form.validation.Rule;
 class MaxLength implements Rule
 {
 	public var max : Int;
-	
+	public var error : Bool;
+	public var message : String;
+
 	public function new(x : Int)
 	{
+		error = false;
+		message = "The field \"##\" should length more than " + x + " characters";
 		max = x;
 	}
 	

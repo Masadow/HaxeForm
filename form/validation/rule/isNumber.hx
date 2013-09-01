@@ -7,10 +7,13 @@ import form.validation.Rule;
  */
 class isNumber implements Rule
 {
+	public var error : Bool;
+	public var message : String;
 
 	public function new() 
 	{
-		
+		error = false;
+		message = "The field \"##\" should be a number";
 	}
 
 	public function apply(value : String) : Bool

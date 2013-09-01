@@ -7,4 +7,6 @@ package form.validation;
 interface Rule
 {
 	public function apply(value : String) : Bool;
+	public var error : Bool;
+	public var message : String;
 }

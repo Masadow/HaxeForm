@@ -8,9 +8,13 @@ import form.validation.Rule;
 class ExactLength implements Rule
 {
 	public var length : Int;
+	public var error : Bool;
+	public var message : String;
 	
 	public function new(x : Int)
 	{
+		error = false;
+		message = "The field \"##\" should length " + x + " characters";
 		length = x;
 	}
 	

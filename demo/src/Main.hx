@@ -38,6 +38,7 @@ class Main
 		
 		//Add some inputs to the form
 		var textinput : Text = form.content.addTextInput("Enter a sentence beginning with 'Hello'", "hello", "Hello");
+		textinput.errorLabel = "First";
 		textinput.attr.clazz = "red"; //Note "clazz" instead of "class".
 		textinput.rules.push(new CustomRule());
 
@@ -68,7 +69,7 @@ class Main
 		form.submitValue = "GO GO GO !";
 
 		if (form.valid()) {
-			
+			trace("valid");
 		}
 		
 		//Repopulate all fields after the form was submited

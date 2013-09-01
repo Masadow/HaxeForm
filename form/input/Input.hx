@@ -10,6 +10,7 @@ import form.validation.Rule;
 class Input implements Display
 {
 	public var label : String;
+	public var errorLabel : Null<String>;
 	public var name : String;
 	public var value : String;
 	public var attr : Dynamic;
@@ -18,6 +19,7 @@ class Input implements Display
 	public function new() 
 	{
 		label = "";
+		errorLabel = null;
 		name = "";
 		value = "";
 		attr = { };
@@ -41,12 +43,25 @@ class Input implements Display
 		}
 		attr.value = value;
 		attr.name = name;
-		code += Utils.generateAttributes(attr);
-		return code + "/> ";
+		code += Utils.generateAttributes(attr) + "/>";
+		var error = getError();
+		if (error.length > 0) {
+			code += "<span class=\"formError\">" + error +"</span>";
+		}
+		return code;
 	}
 	
 	public function print() : Void {
 		Sys.print(html());
+	}
+	
+	public function getError() : String {
+		var errors : String = "";
+		for (rule in rules) {
+			if (rule.error)
+				errors += "<span class=\"formErrorElement\">" + rule.message + "</span>";
+		}
+		return errors;
 	}
 	
 }

@@ -64,7 +64,6 @@ class Form implements Display
 					if (Reflect.hasField(i.attr, "checked") && Web.getParamValues(i.name.substr(0, i.name.length - 2)).length > 0) {
 						var attr : Dynamic = { };
 						for (field in Reflect.fields(i.attr)) {
-							trace(field);
 							if (field != "checked")
 								Reflect.setField(attr, field, Reflect.field(i.attr, field));
 						}
@@ -118,9 +117,34 @@ class Form implements Display
 		Sys.print(html());
 	}
 	
+	private function validGroup(group : Group) : Bool
+	{
+		var valid : Bool = true;
+		for (element in group.inputs) {
+			if (Std.is(element, Group)) {
+				valid = validGroup(cast element) && valid;
+			}
+			else {
+				var input : Input = cast element;
+				for (rule in input.rules) {
+					var value : String;
+					if (StringTools.endsWith(input.name, "[]")) {
+						value = Web.getParamValues(input.name.substr(0, input.name.length - 2)).toString();
+					}
+					else {
+						value = params.get(input.name);
+					}
+					rule.message = StringTools.replace(rule.message, "##", input.errorLabel != null ? input.errorLabel : input.label);
+					valid = !(rule.error = !rule.apply(value)) && valid;
+				}
+			}
+		}
+		return valid;
+	}
+	
 	public function valid() : Bool
 	{
-		return true;
+		return validGroup(content);
 	}
 
 	/*
@@ -137,12 +161,13 @@ class Form implements Display
 		Sys.print("<fieldset><legend>Form " + (attr.id ? "#" + attr.id : "") + " debug display</legend>");
 		Sys.print("<fieldset><legend>Form rendering source code</legend><code>"+ StringTools.htmlEscape(html()) +"</code></fieldset>");
 		Sys.print("<fieldset><legend>Fields rules</legend></fieldset>");
+		Sys.print("<fieldset><legend>Validation errors</legend></fieldset>");
 		#if php
 		Sys.print("<fieldset><legend>" + Std.string(method) + " data</legend>" + (method == GET ? Debug.formGetData() : Debug.formPostData()) +"</fieldset>");
 		#else
 		Sys.print("<fieldset><legend>" + Std.string(method) + " data</legend>Not compatible with your compilation target</fieldset>");
 		#end
-		Sys.print("<fieldset><legend>Files</legend>" + (upload ? "" : "Not a form upload") + "</fieldset>");
+		Sys.print("<fieldset><legend>Files</legend>" + (upload ? "" : "Not an upload form") + "</fieldset>");
 		Sys.print("<fieldset><legend>Execution times</legend></fieldset>");
 		Sys.print("</fieldset>");
 	}
