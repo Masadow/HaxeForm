@@ -13,12 +13,12 @@ class CustomRule implements Rule
 	public function new() 
 	{
 		error = false;
-		message = "The field \"##\" should starts with \"hello\"";
+		message = "The field \"##\" should starts with \"Hello\"";
 	}
 	
 	public function apply(value : String) : Bool
 	{
-		return StringTools.startsWith(value, "hello");
+		return StringTools.startsWith(value, "Hello");
 	}
 	
 }
