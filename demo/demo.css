@@ -1,0 +1,11 @@
+.haxe-form label {
+    font-weight: bold; 
+}
+
+.haxe-form textarea {
+	display: block;
+	background-color: Black;
+	color: White;
+	width: 450px;
+	height: 250px;
+}

@@ -6,6 +6,7 @@ import form.input.Text;
 import form.input.Textarea;
 import form.validation.rule.Min;
 import form.validation.rule.MinLength;
+import form.MacroHelper;
 import php.Lib;
 
 /**
@@ -84,6 +85,13 @@ class Main
 		//Don't do anything the first time
 		form.repopulate();
 
+		// Apply a CSS file to your form
+		/* You have two possibilities using this method
+			* If the second parameter is set to true (default), you have to give a valid css file path as first argument
+			* If the second parameter is set to false, you have to pass a valid css string
+		 */
+		form.setTheme(MacroHelper.getFileContent("demo.css"), false);
+		
 		//Print the form. You can print each input yourself by calling Input.print() method
 		form.print();
 		

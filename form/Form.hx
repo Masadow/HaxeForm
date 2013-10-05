@@ -8,6 +8,7 @@ import php.Lib;
 import php.Sys;
 import php.Web;
 import haxe.ds.StringMap;
+import sys.io.File;
 
 enum Method {
 	GET;
@@ -28,9 +29,11 @@ class Form implements Display
 	public var method : Method;
 	public var attr : Dynamic;
 	public var submitValue : Null<String>;
+	private var theme : String;
 
 	public function new() 
 	{
+		theme = "";
 		content = new Group();
 		upload = false;
 		action = Request.getURI();
@@ -115,6 +118,7 @@ class Form implements Display
 	}
 	
 	public function print() : Void {
+		Sys.print("<style>" + theme + "</style>");
 		Sys.print(html());
 	}
 	
@@ -147,6 +151,14 @@ class Form implements Display
 	{
 		return validGroup(content);
 	}
+	
+	public function setTheme(data : String, loadFile : Bool = true)
+	{
+		if (loadFile) {
+			data = File.getContent(data);
+		}
+		theme = data;
+	}
 
 	/*
 	 * TODO:
@@ -160,6 +172,7 @@ class Form implements Display
 	 */
 	public function debug() : Void {
 		Sys.print("<fieldset><legend>Form " + (attr.id ? "#" + attr.id : "") + " debug display</legend>");
+		Sys.print("<fieldset><legend>Theme</legend><code>"+ StringTools.htmlEscape("<style>" + theme + "</style>") +"</code></fieldset>");
 		Sys.print("<fieldset><legend>Form rendering source code</legend><code>"+ StringTools.htmlEscape(html()) +"</code></fieldset>");
 		Sys.print("<fieldset><legend>Fields rules</legend></fieldset>");
 		Sys.print("<fieldset><legend>Validation errors</legend></fieldset>");
