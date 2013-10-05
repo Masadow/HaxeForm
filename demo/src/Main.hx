@@ -2,6 +2,7 @@ package ;
 
 import form.Form;
 import form.Group;
+import form.input.Dropdown;
 import form.input.Text;
 import form.input.Textarea;
 import form.validation.rule.Min;
@@ -74,6 +75,17 @@ class Main
 		textarea.errorLabel = "Story";
 		textarea.rules.push(new MinLength(50));
 		form.content.addInput(textarea);
+		
+		var dropdown = new Dropdown();
+		dropdown.label = "Pick a color";
+		dropdown.name = "color";
+		dropdown.errorLabel = "Color";
+
+		dropdown.addItem(new Item("Red", "red", "style='color:red'"));
+		dropdown.addItem(new Item("Green", "green", "style='color:green'"));
+		dropdown.addItem(new Item("Blue", "blue", "style='color:blue'"));
+		
+		form.content.addInput(dropdown);
 
 		form.submitValue = "GO GO GO !";
 
