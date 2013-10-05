@@ -102,7 +102,7 @@ class Form implements Display
 			attr.enctype = "multipart/form-data";
 		}
 
-		content.attr.clazz = "haxe-form " + content.attr.clazz;
+		content.attr.clazz = "haxe-form" + (content.attr.clazz != null ? (" " + content.attr.clazz) : "");
 		for (field in Reflect.fields(attr)) {
 			Reflect.setField(content.attr, field, Reflect.field(attr, field));
 		}
