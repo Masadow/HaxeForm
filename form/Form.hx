@@ -131,6 +131,10 @@ class Form implements Display
 			}
 			else {
 				var input : Input = cast element;
+				if (!params.exists(input.name)) {
+					valid = false; //The form is can't say to be valid if it hasn't been submitted yet
+					continue;
+				}
 				for (rule in input.rules) {
 					var value : String;
 					if (StringTools.endsWith(input.name, "[]")) {
