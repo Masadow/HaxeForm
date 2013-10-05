@@ -3,12 +3,13 @@ package ;
 import form.Form;
 import form.Group;
 import form.input.Text;
+import form.input.Textarea;
 import form.validation.rule.Min;
+import form.validation.rule.MinLength;
 import php.Lib;
 
 /**
  * TODO:
-	 * Group field
 	 * File input
 	 * Rules:
 		 * mail
@@ -53,7 +54,7 @@ class Main
 		radioGroup.isInline = true;
 		radioGroup.addRadioInput("A", "radio[]", "A");
 		radioGroup.addRadioInput("B", "radio[]", "B");
-		radioGroup.addRadioInput("C (FALSE)", "radio[]", "C").attr.checked = true;
+		radioGroup.addRadioInput("C", "radio[]", "C").attr.checked = true;
 		radioGroup.addRadioInput("D", "radio[]", "D");
 		form.content.addGroup(radioGroup);
 
@@ -65,6 +66,13 @@ class Main
 		cbGroup.addCheckboxInput("Kitchen", "cb[]", "kitchen").attr.checked = true;
 		cbGroup.addCheckboxInput("Bird", "cb[]", "bird");
 		form.content.addGroup(cbGroup);
+		
+		var textarea = new Textarea();
+		textarea.label = "Tell your story. No less than 50 characters";
+		textarea.name = "story";
+		textarea.errorLabel = "Story";
+		textarea.rules.push(new MinLength(50));
+		form.content.addInput(textarea);
 
 		form.submitValue = "GO GO GO !";
 

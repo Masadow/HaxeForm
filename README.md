@@ -48,11 +48,11 @@ Now, you simply have to attach your fields to your form. Here is the list of sup
 
 Here is an example of how to create a field and then, attach it to your form
 
-		textinput = new Text(); //Instanciate your field
-		textinput.attr.label.clazz = "green"; //Set some attributes
-		textinput.label = "Do not leave it blank"; //You can specify the title of your field
-		textinput.name = "noblank"; // Field name attribute
-		form.content.addInput(textinput).attr.id = "blue"; //Attach your field to the form
+	textinput = new Text(); //Instanciate your field
+	textinput.attr.label.clazz = "green"; //Set some attributes
+	textinput.label = "Do not leave it blank"; //You can specify the title of your field
+	textinput.name = "noblank"; // Field name attribute
+	form.content.addInput(textinput).attr.id = "blue"; //Attach your field to the form
 
 Let's explain the last line step by step. First of all, we're accessing `form.content`. It is the main container of your form. It is typed as a `Group` object which I'll explain later. `Group` object can either contain `Input` object or other `Group` object.
 
