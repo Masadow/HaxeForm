@@ -108,7 +108,7 @@ class Main
 		form.print();
 		
 		//Debug purpose
-		form.debug();
+		form.debug.show();
 	}
 
 }

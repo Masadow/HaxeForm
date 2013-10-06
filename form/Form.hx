@@ -3,6 +3,7 @@ import form.input.Checkbox;
 import form.input.Input;
 import form.input.Radio;
 import form.input.Text;
+import haxe.Timer;
 import haxe.web.Request;
 import php.Lib;
 import php.Sys;
@@ -22,14 +23,15 @@ enum Method {
 class Form implements Display
 {
 	private var params : StringMap<String>;
-	
+
+	public var theme(default, null) : String;
+	public var debug(default, null) : Debug;
 	public var content(default, null) : Group;
 	public var upload : Bool;
 	public var action : String;
 	public var method : Method;
 	public var attr : Dynamic;
 	public var submitValue : Null<String>;
-	private var theme : String;
 
 	public function new() 
 	{
@@ -41,6 +43,7 @@ class Form implements Display
 		attr = { };
 		submitValue = null;
 		params = Web.getParams();
+		debug = new Debug(this);
 	}
 	
 	public function addInput(input : Input) : Input {
@@ -90,7 +93,9 @@ class Form implements Display
 	}
 	
 	public function repopulate() {
+		debug.measureStart();
 		populateGroup(content);
+		debug.measureEnd("Populating");
 	}
 
 	public function html() : String {
@@ -118,8 +123,10 @@ class Form implements Display
 	}
 	
 	public function print() : Void {
+		debug.measureStart();
 		Sys.print("<style>" + theme + "</style>");
 		Sys.print(html());
+		debug.measureEnd("Printing");
 	}
 	
 	private function validGroup(group : Group) : Bool
@@ -153,7 +160,10 @@ class Form implements Display
 	
 	public function valid() : Bool
 	{
-		return validGroup(content);
+		debug.measureStart();
+		var isValid = validGroup(content);
+		debug.measureEnd("Validation");
+		return isValid;
 	}
 	
 	public function setTheme(data : String, loadFile : Bool = true)
@@ -162,31 +172,5 @@ class Form implements Display
 			data = File.getContent(data);
 		}
 		theme = data;
-	}
-
-	/*
-	 * TODO:
-		 * Code display:
-			* Add \n to html methods and a pre tag to have a better formatting
-		 * Fields rules
-		 * Form post/get data (Neko compatibility needed)
-		 * Execution times:
-			 * Rendering
-			 * Validating
-	 */
-	public function debug() : Void {
-		Sys.print("<fieldset><legend>Form " + (attr.id ? "#" + attr.id : "") + " debug display</legend>");
-		Sys.print("<fieldset><legend>Theme</legend><code>"+ StringTools.htmlEscape("<style>" + theme + "</style>") +"</code></fieldset>");
-		Sys.print("<fieldset><legend>Form rendering source code</legend><code>"+ StringTools.htmlEscape(html()) +"</code></fieldset>");
-		Sys.print("<fieldset><legend>Fields rules</legend></fieldset>");
-		Sys.print("<fieldset><legend>Validation errors</legend></fieldset>");
-		#if php
-		Sys.print("<fieldset><legend>" + Std.string(method) + " data</legend>" + (method == GET ? Debug.formGetData() : Debug.formPostData()) +"</fieldset>");
-		#else
-		Sys.print("<fieldset><legend>" + Std.string(method) + " data</legend>Not compatible with your compilation target</fieldset>");
-		#end
-		Sys.print("<fieldset><legend>Files</legend>" + (upload ? "" : "Not an upload form") + "</fieldset>");
-		Sys.print("<fieldset><legend>Execution times</legend></fieldset>");
-		Sys.print("</fieldset>");
 	}
 }
